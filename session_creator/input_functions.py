@@ -80,7 +80,6 @@ def get_column_and_cells(spreadsheet_range):  # CLI ONLY
 def validate_input(list_file, output_file_path, directory,
                    distance_multiplier, column, row_range):
     errors = []
-
     if os.path.isfile(list_file):  # if file exist:
 
         # if invalid type:
@@ -93,7 +92,21 @@ def validate_input(list_file, output_file_path, directory,
         if extension in st.input_formats['spreadsheet']:
             row_start, row_stop, errors = validate_excel_range(
                                                 column, row_range, errors)
-
+        elif extension in st.input_formats['text']:  #brakuje tu obsługi pliku .txt
+            # w linii 115 dostawałem: UnboundLocalError: local variable 'row_start' referenced before assignment
+            row_start, row_stop = None, None
+        else:
+            """
+            no właśnie, a co w pozostałych przypadkach... trochę inaczej skonstruowałbym te warunki, np:
+            if extension in st.input_formats['spreadsheet']:
+                row_start, row_stop, errors = validate_excel_range(
+                                                    column, row_range, errors)
+            elif extension in st.input_formats['text']:  #brakuje tu obsługi pliku .txt
+                row_start, row_stop = 0, 0
+            else:
+                errors.append("List_file_unknown_format.")
+            """
+            pass
     else:  # if file does not exist:
         errors.append("List_file_missing")
 
